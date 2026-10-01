@@ -1,0 +1,23 @@
+{% extends 'students/base.html' %}
+
+{% block title %}My Remarks{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-4">Teacher Remarks</h1>
+
+    {% if remarks %}
+        <div class="list-group shadow-sm">
+            {% for remark in remarks %}
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-semibold">{{ remark.teacher.full_name|default:"Staff" }}</span>
+                        <span class="text-secondary small">{{ remark.created_at|date:"M d, Y — H:i" }}</span>
+                    </div>
+                    <p class="mb-0 mt-1">{{ remark.remark_text }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-state"><i class="bi bi-chat-square-text fs-2 d-block mb-2"></i>No remarks have been left yet.</p>
+    {% endif %}
+{% endblock %}

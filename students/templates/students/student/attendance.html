@@ -1,0 +1,39 @@
+{% extends 'students/base.html' %}
+
+{% block title %}My Attendance{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">My Attendance</h1>
+        {% if attendance_percentage is not None %}
+            <span class="badge text-bg-primary fs-6">{{ attendance_percentage }}% present</span>
+        {% endif %}
+    </div>
+
+    {% if records %}
+        <div class="table-responsive table-responsive-card shadow-sm border">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                        <tr>
+                            <td>{{ record.date }}</td>
+                            <td>
+                                <span class="badge {% if record.status == 'Present' %}text-bg-success{% else %}text-bg-danger{% endif %}">
+                                    {{ record.status }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="empty-state"><i class="bi bi-calendar-x fs-2 d-block mb-2"></i>No attendance records yet.</p>
+    {% endif %}
+{% endblock %}

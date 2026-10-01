@@ -1,0 +1,95 @@
+{% extends 'students/base.html' %}
+
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-1">Welcome, {{ student.full_name }} 👋</h1>
+    <p class="text-secondary mb-4">Roll No. {{ student.roll_number }} · {{ student.course.course_name }}</p>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <div class="stat-icon bg-primary-subtle text-primary mb-2"><i class="bi bi-calendar-check"></i></div>
+                    <div class="h4 mb-0">{% if attendance_percentage is not None %}{{ attendance_percentage }}%{% else %}—{% endif %}</div>
+                    <div class="text-secondary small">Attendance</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <div class="stat-icon bg-success-subtle text-success mb-2"><i class="bi bi-clipboard-data"></i></div>
+                    <div class="h4 mb-0">{{ recent_marks|length }}</div>
+                    <div class="text-secondary small">Recent marks</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <div class="stat-icon bg-warning-subtle text-warning mb-2"><i class="bi bi-megaphone"></i></div>
+                    <div class="h4 mb-0">{{ pending_complaints_count }}</div>
+                    <div class="text-secondary small">Pending complaints</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <div class="stat-icon bg-info-subtle text-info mb-2"><i class="bi bi-chat-square-text"></i></div>
+                    <div class="h4 mb-0">{{ recent_remarks|length }}</div>
+                    <div class="text-secondary small">Recent remarks</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold">Latest marks</span>
+                    <a href="{% url 'student_marks' %}" class="small">View all</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_marks %}
+                        <ul class="list-group list-group-flush">
+                            {% for mark in recent_marks %}
+                                <li class="list-group-item d-flex justify-content-between px-0">
+                                    <span>{{ mark.subject_name }}</span>
+                                    <span class="fw-semibold">{{ mark.marks_obtained }}/{{ mark.total_marks }} ({{ mark.percentage }}%)</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="empty-state mb-0"><i class="bi bi-inbox fs-3 d-block mb-2"></i>No marks recorded yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold">Recent remarks</span>
+                    <a href="{% url 'student_remarks' %}" class="small">View all</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_remarks %}
+                        <ul class="list-group list-group-flush">
+                            {% for remark in recent_remarks %}
+                                <li class="list-group-item px-0">
+                                    <div class="small text-secondary">{{ remark.created_at|date:"M d, Y" }} — {{ remark.teacher.full_name|default:"Staff" }}</div>
+                                    <div>{{ remark.remark_text }}</div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="empty-state mb-0"><i class="bi bi-chat-square fs-3 d-block mb-2"></i>No remarks yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

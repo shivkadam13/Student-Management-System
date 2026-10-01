@@ -1,0 +1,84 @@
+{% extends 'students/base.html' %}
+
+{% block title %}Login — Student Management System{% endblock %}
+
+{% block content %}
+    <div class="login-wrapper">
+        <div class="card login-card shadow-sm border-0">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="login-brand mb-2">🎓</div>
+                    <h1 class="h4 fw-semibold mb-1">Student Management System</h1>
+                    <p class="text-secondary small mb-0">Sign in to continue</p>
+                </div>
+
+                <ul class="nav nav-pills nav-justified mb-4" id="loginTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {% if active_tab == 'student' %}active{% endif %}" id="student-tab-btn"
+                                data-bs-toggle="pill" data-bs-target="#student-pane" type="button" role="tab">
+                            <i class="bi bi-person"></i> Student Login
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {% if active_tab == 'teacher' %}active{% endif %}" id="teacher-tab-btn"
+                                data-bs-toggle="pill" data-bs-target="#teacher-pane" type="button" role="tab">
+                            <i class="bi bi-person-badge"></i> Teacher Login
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade {% if active_tab == 'student' %}show active{% endif %}" id="student-pane" role="tabpanel">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            <input type="hidden" name="role" value="student">
+
+                            {% if student_form.non_field_errors %}
+                                <div class="alert alert-danger py-2">{{ student_form.non_field_errors.0 }}</div>
+                            {% endif %}
+
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ student_form.username.id_for_label }}">Username</label>
+                                {{ student_form.username }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ student_form.password.id_for_label }}">Password</label>
+                                {{ student_form.password }}
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-box-arrow-in-right"></i> Log in as Student
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane fade {% if active_tab == 'teacher' %}show active{% endif %}" id="teacher-pane" role="tabpanel">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            <input type="hidden" name="role" value="teacher">
+
+                            {% if teacher_form.non_field_errors %}
+                                <div class="alert alert-danger py-2">{{ teacher_form.non_field_errors.0 }}</div>
+                            {% endif %}
+
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ teacher_form.username.id_for_label }}">Username</label>
+                                {{ teacher_form.username }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ teacher_form.password.id_for_label }}">Password</label>
+                                {{ teacher_form.password }}
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-box-arrow-in-right"></i> Log in as Teacher
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <p class="text-center text-secondary small mt-4 mb-0">
+                    Accounts are created by an administrator or teacher — there's no public sign-up.
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

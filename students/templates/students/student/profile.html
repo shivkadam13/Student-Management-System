@@ -1,0 +1,32 @@
+{% extends 'students/base.html' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-4">My Profile</h1>
+
+    <div class="card shadow-sm border-0" style="max-width: 560px;">
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-4 text-secondary">Full name</dt>
+                <dd class="col-sm-8">{{ student.full_name }}</dd>
+
+                <dt class="col-sm-4 text-secondary">Roll number</dt>
+                <dd class="col-sm-8">{{ student.roll_number }}</dd>
+
+                <dt class="col-sm-4 text-secondary">Email</dt>
+                <dd class="col-sm-8">{{ student.email }}</dd>
+
+                <dt class="col-sm-4 text-secondary">Phone</dt>
+                <dd class="col-sm-8">{{ student.phone_number|default:"—" }}</dd>
+
+                <dt class="col-sm-4 text-secondary">Date of birth</dt>
+                <dd class="col-sm-8">{{ student.date_of_birth|default:"—" }}</dd>
+
+                <dt class="col-sm-4 text-secondary">Course</dt>
+                <dd class="col-sm-8">{{ student.course.course_name }} ({{ student.course.course_code }})</dd>
+            </dl>
+        </div>
+    </div>
+    <p class="text-secondary small mt-3">To update any of these details, please contact your teacher or administrator.</p>
+{% endblock %}

@@ -1,0 +1,80 @@
+/* Small custom layer on top of Bootstrap 5 - most styling comes from
+   Bootstrap itself; this file only covers what Bootstrap doesn't. */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.page {
+    flex: 1;
+    padding-top: 24px;
+    padding-bottom: 40px;
+}
+
+.site-navbar {
+    background-color: var(--bs-body-bg);
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+/* Sun/moon icon swap on the theme toggle button */
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: inline; }
+[data-bs-theme="dark"] .theme-toggle .icon-sun { display: inline; }
+[data-bs-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+/* ---------------- Login page ---------------- */
+
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 12px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+}
+
+.login-brand {
+    font-size: 2rem;
+}
+
+/* ---------------- Dashboard summary cards ---------------- */
+
+.stat-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--bs-box-shadow) !important;
+}
+.stat-card .stat-icon {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.3rem;
+}
+
+/* ---------------- Misc ---------------- */
+
+.table-responsive-card {
+    border-radius: var(--bs-border-radius-lg);
+    overflow: hidden;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 36px 16px;
+    color: var(--bs-secondary-color);
+}
+
+.site-footer {
+    border-top: 1px solid var(--bs-border-color);
+}

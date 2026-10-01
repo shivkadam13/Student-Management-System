@@ -1,0 +1,89 @@
+{% extends 'students/base.html' %}
+
+{% block title %}{{ heading }}{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-4">{{ heading }}</h1>
+
+    <div class="card shadow-sm border-0" style="max-width: 640px;">
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {% if is_create %}
+                    <h2 class="h6 text-secondary text-uppercase mb-3">Login credentials</h2>
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <label class="form-label" for="{{ credentials_form.username.id_for_label }}">Username</label>
+                            {{ credentials_form.username }}
+                            {% if credentials_form.username.errors %}<div class="text-danger small mt-1">{{ credentials_form.username.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ credentials_form.password1.id_for_label }}">Password</label>
+                            {{ credentials_form.password1 }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ credentials_form.password2.id_for_label }}">Confirm password</label>
+                            {{ credentials_form.password2 }}
+                        </div>
+                        {% if credentials_form.non_field_errors %}
+                            <div class="col-12"><div class="text-danger small">{{ credentials_form.non_field_errors.0 }}</div></div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <h2 class="h6 text-secondary text-uppercase mb-3">Personal details</h2>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ user_form.first_name.id_for_label }}">First name</label>
+                        {{ user_form.first_name }}
+                        {% if user_form.first_name.errors %}<div class="text-danger small mt-1">{{ user_form.first_name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ user_form.last_name.id_for_label }}">Last name</label>
+                        {{ user_form.last_name }}
+                        {% if user_form.last_name.errors %}<div class="text-danger small mt-1">{{ user_form.last_name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="{{ user_form.email.id_for_label }}">Email</label>
+                        {{ user_form.email }}
+                        {% if user_form.email.errors %}<div class="text-danger small mt-1">{{ user_form.email.errors.0 }}</div>{% endif %}
+                    </div>
+                </div>
+
+                <h2 class="h6 text-secondary text-uppercase mb-3">Student profile</h2>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ profile_form.roll_number.id_for_label }}">Roll number</label>
+                        {{ profile_form.roll_number }}
+                        {% if profile_form.roll_number.errors %}<div class="text-danger small mt-1">{{ profile_form.roll_number.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ profile_form.phone_number.id_for_label }}">Phone number</label>
+                        {{ profile_form.phone_number }}
+                        {% if profile_form.phone_number.errors %}<div class="text-danger small mt-1">{{ profile_form.phone_number.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ profile_form.date_of_birth.id_for_label }}">Date of birth</label>
+                        {{ profile_form.date_of_birth }}
+                        {% if profile_form.date_of_birth.errors %}<div class="text-danger small mt-1">{{ profile_form.date_of_birth.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ profile_form.course.id_for_label }}">Course</label>
+                        {{ profile_form.course }}
+                        {% if profile_form.course.errors %}<div class="text-danger small mt-1">{{ profile_form.course.errors.0 }}</div>{% endif %}
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    {% if student %}
+                        <a href="{% url 'teacher_student_detail' student.pk %}" class="btn btn-outline-secondary">Cancel</a>
+                    {% else %}
+                        <a href="{% url 'teacher_student_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

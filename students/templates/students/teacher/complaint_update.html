@@ -1,0 +1,43 @@
+{% extends 'students/base.html' %}
+
+{% block title %}Update Complaint{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-1">Update Complaint</h1>
+    <p class="text-secondary mb-4">From {{ complaint.student.full_name }} ({{ complaint.student.roll_number }})</p>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="h6 text-secondary text-uppercase">Original complaint</h2>
+                    <p class="fw-semibold mb-1">{{ complaint.subject }}</p>
+                    <p class="mb-0">{{ complaint.description }}</p>
+                    <p class="text-secondary small mt-2 mb-0">Filed {{ complaint.created_at|date:"M d, Y — H:i" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ form.status.id_for_label }}">Status</label>
+                            {{ form.status }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ form.teacher_response.id_for_label }}">Response to student</label>
+                            {{ form.teacher_response }}
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a href="{% url 'teacher_complaint_list' %}" class="btn btn-outline-secondary">Back to list</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

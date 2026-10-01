@@ -1,0 +1,39 @@
+{% extends 'students/base.html' %}
+
+{% block title %}All Marks{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-4">All Marks</h1>
+
+    {% if records %}
+        <div class="table-responsive table-responsive-card shadow-sm border">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Student</th>
+                        <th>Roll No.</th>
+                        <th>Subject</th>
+                        <th>Score</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mark in records %}
+                        <tr>
+                            <td><a href="{% url 'teacher_student_detail' mark.student.pk %}">{{ mark.student.full_name }}</a></td>
+                            <td>{{ mark.student.roll_number }}</td>
+                            <td>{{ mark.subject_name }}</td>
+                            <td>{{ mark.marks_obtained }}/{{ mark.total_marks }} ({{ mark.percentage }}%)</td>
+                            <td class="text-end">
+                                <a href="{% url 'teacher_mark_edit' mark.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                                <a href="{% url 'teacher_mark_delete' mark.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="empty-state"><i class="bi bi-clipboard-data fs-2 d-block mb-2"></i>No marks recorded yet.</p>
+    {% endif %}
+{% endblock %}

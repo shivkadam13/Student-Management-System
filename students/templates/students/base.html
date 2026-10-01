@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Student Management System{% endblock %}</title>
+
+    <!-- Set the theme before anything renders, so there's no flash of the wrong colors. -->
+    <script>
+        (function () {
+            var stored = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var theme = stored || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-bs-theme', theme);
+        })();
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'students/style.css' %}">
+</head>
+<body>
+
+{% if user.is_authenticated %}
+    <nav class="navbar navbar-expand-lg sticky-top shadow-sm site-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-semibold" href="{% if user.teacher_profile %}{% url 'teacher_dashboard' %}{% else %}{% url 'student_dashboard' %}{% endif %}">
+                <i class="bi bi-mortarboard-fill me-1"></i> SMS
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav me-auto">
+                    {% if user.teacher_profile %}
+                        {% url 'teacher_dashboard' as u_dash %}
+                        {% url 'teacher_student_list' as u_students %}
+                        {% url 'teacher_attendance_list' as u_att %}
+                        {% url 'teacher_mark_list' as u_marks %}
+                        {% url 'teacher_complaint_list' as u_complaints %}
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_dash %}active{% endif %}" href="{{ u_dash }}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_students %}active{% endif %}" href="{{ u_students }}">Students</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_att %}active{% endif %}" href="{{ u_att }}">Attendance</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_marks %}active{% endif %}" href="{{ u_marks }}">Marks</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_complaints %}active{% endif %}" href="{{ u_complaints }}">Complaints</a></li>
+                    {% elif user.student_profile %}
+                        {% url 'student_dashboard' as u_dash %}
+                        {% url 'student_profile' as u_profile %}
+                        {% url 'student_marks' as u_marks %}
+                        {% url 'student_attendance' as u_att %}
+                        {% url 'student_complaints' as u_complaints %}
+                        {% url 'student_remarks' as u_remarks %}
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_dash %}active{% endif %}" href="{{ u_dash }}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_profile %}active{% endif %}" href="{{ u_profile }}">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_marks %}active{% endif %}" href="{{ u_marks }}">Marks</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_att %}active{% endif %}" href="{{ u_att }}">Attendance</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_complaints %}active{% endif %}" href="{{ u_complaints }}">Complaints</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.path == u_remarks %}active{% endif %}" href="{{ u_remarks }}">Remarks</a></li>
+                    {% endif %}
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    <span class="navbar-text small d-none d-md-inline">
+                        {% if user.teacher_profile %}
+                            <i class="bi bi-person-badge"></i> {{ user.teacher_profile.full_name }} · Teacher
+                        {% elif user.student_profile %}
+                            <i class="bi bi-person"></i> {{ user.student_profile.full_name }} · Student
+                        {% endif %}
+                    </span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle theme-toggle" id="theme-toggle" title="Toggle light / dark mode">
+                        <i class="bi bi-sun-fill icon-sun"></i>
+                        <i class="bi bi-moon-stars-fill icon-moon"></i>
+                    </button>
+                    <form method="post" action="{% url 'logout' %}" class="mb-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% endif %}
+
+    <main class="container page">
+        {% if messages %}
+            <div class="mt-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="site-footer text-center text-secondary small py-4">
+        🎓 Student Management System &mdash; built for learning purposes.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'students/theme.js' %}"></script>
+</body>
+</html>

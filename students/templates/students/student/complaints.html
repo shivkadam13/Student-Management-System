@@ -1,0 +1,73 @@
+{% extends 'students/base.html' %}
+
+{% block title %}My Complaints{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-4">My Complaints</h1>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            {% if complaints %}
+                <div class="table-responsive table-responsive-card shadow-sm border">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Subject</th>
+                                <th>Status</th>
+                                <th>Filed on</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for complaint in complaints %}
+                                <tr>
+                                    <td>
+                                        {{ complaint.subject }}
+                                        <div class="small text-secondary">{{ complaint.description|truncatewords:15 }}</div>
+                                        {% if complaint.teacher_response %}
+                                            <div class="small mt-1"><strong>Response:</strong> {{ complaint.teacher_response }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge {% if complaint.status == 'Resolved' %}text-bg-success{% elif complaint.status == 'In Progress' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">
+                                            {{ complaint.status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ complaint.created_at|date:"M d, Y" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="empty-state"><i class="bi bi-megaphone fs-2 d-block mb-2"></i>You haven't filed any complaints.</p>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-transparent fw-semibold">File a new complaint</div>
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger py-2">{{ form.non_field_errors.0 }}</div>
+                        {% endif %}
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ form.subject.id_for_label }}">Subject</label>
+                            {{ form.subject }}
+                            {% if form.subject.errors %}<div class="text-danger small mt-1">{{ form.subject.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ form.description.id_for_label }}">Description</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}<div class="text-danger small mt-1">{{ form.description.errors.0 }}</div>{% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Submit complaint
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

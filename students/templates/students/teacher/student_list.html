@@ -1,0 +1,81 @@
+{% extends 'students/base.html' %}
+
+{% block title %}Students{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h1 class="h3 mb-0">Students</h1>
+        <a href="{% url 'teacher_student_add' %}" class="btn btn-primary">
+            <i class="bi bi-person-plus"></i> Add Student
+        </a>
+    </div>
+
+    <form method="get" class="card shadow-sm border-0 p-3 mb-4">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small">Name</label>
+                <input type="text" name="q" class="form-control" placeholder="Search by name..." value="{{ query }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small">Roll number</label>
+                <input type="text" name="roll" class="form-control" placeholder="e.g. STU2026001" value="{{ roll_number }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small">Course</label>
+                <select name="course" class="form-select">
+                    <option value="">All courses</option>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}" {% if selected_course_id == course.id|stringformat:"s" %}selected{% endif %}>
+                            {{ course.course_code }} - {{ course.course_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-fill">Filter</button>
+                <a href="{% url 'teacher_student_list' %}" class="btn btn-outline-secondary flex-fill">Clear</a>
+            </div>
+        </div>
+    </form>
+
+    {% if students %}
+        <div class="table-responsive table-responsive-card shadow-sm border">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Roll No.</th>
+                        <th>Name</th>
+                        <th>Course</th>
+                        <th>Email</th>
+                        <th>Attendance</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.roll_number }}</td>
+                            <td><a href="{% url 'teacher_student_detail' student.pk %}">{{ student.full_name }}</a></td>
+                            <td>{{ student.course.course_code }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>
+                                {% if student.attendance_percentage is not None %}
+                                    {{ student.attendance_percentage }}%
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <a href="{% url 'teacher_student_detail' student.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye"></i></a>
+                                <a href="{% url 'teacher_student_edit' student.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                                <a href="{% url 'teacher_student_delete' student.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="empty-state"><i class="bi bi-people fs-2 d-block mb-2"></i>No students match these filters.</p>
+    {% endif %}
+{% endblock %}
